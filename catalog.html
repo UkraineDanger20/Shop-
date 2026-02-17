@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог TechStore</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
+        header { display: flex; justify-content: space-between; background: #333; color: white; padding: 15px; border-radius: 8px; }
+        nav a { color: white; margin-left: 15px; text-decoration: none; }
+        .title { text-align: center; margin-top: 30px; }
+        .search-box { text-align: center; margin-bottom: 20px; }
+        #searchInput { padding: 10px; width: 300px; border-radius: 5px; border: 1px solid #ccc; }
+        
+        .products { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 20px; 
+            padding: 20px; 
+        }
+        .card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card img { max-width: 100%; border-radius: 5px; }
+        .card h3 { font-size: 18px; margin: 10px 0; }
+        button { background: #ff4500; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #e03e00; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">TechStore 🔥</div>
+    <nav>
+        <a href="index.html">Головна</a>
+        <a href="catalog.html">Каталог</a>
+        <a href="cart.html">Кошик 🛒</a>
+        <a href="contacts.html">Контакти</a>
+    </nav>
+</header>
+
+<h2 class="title">Каталог товарів</h2>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Пошук товару...">
+</div>
+
+<div class="products" id="productList"></div>
+
+<script>
+const products = [
+    {name:"Ігрове крісло", price:5500, img:"https://surl.li/hkrdpn"},
+    {name:"Ігровий ПК", price:74999, img:"https://surl.li/wolmea"},
+    {name:"Монітор", price:8999, img:"https://surl.li/kaxzbu"},
+    {name:"Клавіатура", price:1999, img:"https://surl.lu/whfqds"},
+    {name:"Мишка", price:1200, img:"https://surl.lt/pxqmru"},
+    {name:"Навушники", price:3500, img:"https://surl.li/ydckkx"},
+    {name:"Мікрофон", price:2800, img:"https://surl.lt/zuicvi"},
+    {name:"Веб-камера", price:2200, img:"https://surl.lu/grcldh"},
+    {name:"SSD 1TB", price:3200, img:"https://surl.li/gwxezv"},
+    {name:"ОЗУ 16GB", price:2600, img:"https://surl.li/rmfqln"},
+    {name:"Материнська плата", price:5400, img:"https://surl.li/gaitgk"},
+    {name:"Відеокарта", price:18000, img:"https://surl.lt/glvcxl"},
+    {name:"Процесор", price:9500, img:"https://surl.li/beupjr"},
+    {name:"Корпус ПК", price:3000, img:"https://surl.li/rqpril"},
+    {name:"Блок живлення", price:4000, img:"https://surl.li/gjvxwy"},
+    {name:"Геймпад", price:1800, img:"https://surl.li/jrbgac"},
+    {name:"Стіл геймерський", price:7000, img:"https://surl.li/lzcudp"},
+    {name:"Килимок", price:600, img:"https://surl.li/ywyocr"},
+    {name:"Колонки", price:2500, img:"https://surl.li/ckwvwo"},
+    {name:"Ноутбук", price:32000, img:"https://surl.li/mzzoqu"}
+];
+
+const list = document.getElementById("productList");
+
+products.forEach(product => {
+    list.innerHTML += `
+    <div class="card">
+        <img src="${product.img}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>${product.price} грн</p>
+        <button onclick="addToCart('${product.name}', ${product.price})">
+            Додати в кошик
+        </button>
+    </div>`;
+});
+
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let existing = cart.find(item => item.name === name);
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({name, price, quantity: 1});
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Додано в кошик!");
+}
+
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+        let name = card.querySelector("h3").innerText.toLowerCase();
+        card.style.display = name.includes(filter) ? "block" : "none";
+    });
+});
+</script>
+
+</body>
+</html>
